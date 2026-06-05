@@ -77,14 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Ritter Auto Center" },
+      { name: "description", content: "Excelência em mecânica em Ilhota" },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Ritter Auto Center" },
+      { property: "og:description", content: "Excelência em mecânica em Ilhota" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Ritter Auto Center" },
+      { name: "twitter:description", content: "Excelência em mecânica em Ilhota" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b1c5e862-bfea-4ed7-92aa-5bbb21c98649/id-preview-a7d5fce3--916ee9b1-d11a-40b3-845c-f29b326e4964.lovable.app-1780674458665.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b1c5e862-bfea-4ed7-92aa-5bbb21c98649/id-preview-a7d5fce3--916ee9b1-d11a-40b3-845c-f29b326e4964.lovable.app-1780674458665.png" },
     ],
     links: [
       {
