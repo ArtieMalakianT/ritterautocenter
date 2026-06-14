@@ -1,5 +1,5 @@
 {
-  "buildCommand": "NITRO_PRESET=vercel bun run build",
-  "outputDirectory": ".output",
+  "buildCommand": "bun run build",
+  "outputDirectory": ".output/public",
   "framework": null
 }
