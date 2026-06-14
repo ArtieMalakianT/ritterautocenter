@@ -1,5 +1,8 @@
-json{
+{
+  "framework": "tanstack-start",
+  "buildCommand": "bun run build",
+  "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/((?!api/|assets/|_build/|favicon\\.ico|robots\\.txt|sitemap\\.xml).+)", "destination": "/" }
   ]
 }
