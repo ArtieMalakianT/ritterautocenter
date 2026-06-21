@@ -35,7 +35,7 @@ export function FinalCta() {
             <div className="overflow-hidden rounded-2xl border border-white/10">
               <iframe
                 title="Localização Ritter Auto Center no Google Maps"
-                src="https://www.google.com/maps?q=Rodovia+SC-412,+1395,+Po%C3%A7o+Grande,+Ilhota+-+SC&output=embed"
+                src="https://www.google.com/maps?q=AUTO+CENTER+RITTER,+Rua+21+de+Junho,+1395+-+Centro,+Ilhota+-+SC,+88320-001&output=embed"
                 className="h-80 w-full"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
