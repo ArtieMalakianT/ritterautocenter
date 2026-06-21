@@ -63,7 +63,7 @@ function ritter_contact() {
 
     return array(
         'phone'       => $number,
-        'address'     => 'Rodovia SC-412, 1395 - Poço Grande, Ilhota-SC',
+        'address'     => 'Rua 21 de Junho, 1395 - Centro, Ilhota-SC',
         'wa_geral'    => 'https://wa.me/' . $number . '?text=' . rawurlencode( 'Olá, Ritter Auto Center! Tenho uma dúvida.' ),
         'wa_orcam'    => 'https://wa.me/' . $number . '?text=' . rawurlencode( 'Olá! Gostaria de solicitar um orçamento transparente na Ritter Auto Center.' ),
         'wa_agendar'  => 'https://wa.me/' . $number . '?text=' . rawurlencode( 'Olá! Quero agendar minha revisão na Ritter Auto Center.' ),
