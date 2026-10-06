@@ -1,7 +1,7 @@
 export const PIXEL_ID = "1734498380947847";
 export const CONSENT_KEY = "ritter-advertising-consent-v1";
-export const NOTICE_VERSION = "2026-10-06";
-export const NOTICE = "A Ritter Auto Center usa o Meta Pixel para enviar à Meta dados de navegação, páginas visitadas, endereço IP, informações do navegador e identificadores de cookies, para medir visitas e publicidade e apoiar a otimização de anúncios no Facebook e Instagram. Não enviamos dados de contato para correspondência de clientes. Você pode aceitar ou recusar e retirar sua autorização em Configurações de publicidade.";
+export const NOTICE_VERSION = "2026-10-06-capi-1";
+export const NOTICE = "A Ritter Auto Center usa o Meta Pixel e a API de Conversões para enviar à Meta páginas visitadas, cliques nos botões do WhatsApp, endereço IP, informações do navegador e identificadores de cookies, para medir publicidade e apoiar a otimização de anúncios no Facebook e Instagram. Um clique não confirma uma conversa ou agendamento. O envio pela API exige seu aceite. Não enviamos nome, email ou telefone para correspondência de clientes. Você pode aceitar ou recusar e retirar sua autorização em Configurações de publicidade.";
 const regions = new Set("AT BE BG HR CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE IS LI NO GB CH BR".split(" "));
 type Choice = { accepted: boolean; at: string; noticeVersion: string; notice: string; choices: string[] };
 type Record = { visitor: string; history: Choice[] };
@@ -13,11 +13,16 @@ export function readConsent(): Record | null {
     const raw = localStorage.getItem(CONSENT_KEY);
     if (!raw) return null;
     const value = JSON.parse(raw);
-    if (typeof value.visitor !== "string" || !Array.isArray(value.history) || !value.history.length || !value.history.every((c: Choice) => typeof c.accepted === "boolean" && c.noticeVersion === NOTICE_VERSION)) return null;
+    if (typeof value.visitor !== "string" || !Array.isArray(value.history) || !value.history.length || !value.history.every((c: Choice) => c && typeof c.accepted === "boolean" && typeof c.noticeVersion === "string" && typeof c.at === "string" && typeof c.notice === "string")) return null;
     return value;
   } catch { return null; }
 }
-export function choice() { return readConsent()?.history.at(-1)?.accepted; }
+export function choice() {
+  const latest = readConsent()?.history.at(-1);
+  // Preserve refusals and old acceptance evidence; the expanded notice needs a new acceptance.
+  if (latest?.accepted === false) return false;
+  return latest?.noticeVersion === NOTICE_VERSION ? latest.accepted : undefined;
+}
 export function saveConsent(accepted: boolean) {
   try {
     const record = readConsent() ?? { visitor: crypto.randomUUID(), history: [] };

@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { choice, CONSENT_KEY, needsConsent, NOTICE, optedOut, permitted, reportPageView, revokePixel, saveConsent } from "@/lib/meta-consent";
+import { useServerFn } from "@tanstack/react-start";
+import { reportWhatsAppClick } from "@/lib/meta-events.functions";
+import { choice, CONSENT_KEY, needsConsent, NOTICE, optedOut, permitted, readConsent, reportPageView, revokePixel, saveConsent } from "@/lib/meta-consent";
 
 export function AdvertisingConsent() {
+  const sendClick = useServerFn(reportWhatsAppClick);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [regulated, setRegulated] = useState<boolean | null>(null);
   const [open, setOpen] = useState(false);
@@ -39,6 +42,29 @@ export function AdvertisingConsent() {
     });
     return () => { active = false; };
   }, [pathname, regulated, revision]);
+  useEffect(() => {
+    const click = (event: MouseEvent) => {
+      if (!event.isTrusted || event.defaultPrevented || regulated === null || !permitted(regulated)) return;
+      const anchor = event.target instanceof Element ? event.target.closest("a[href]") : null;
+      if (!(anchor instanceof HTMLAnchorElement)) return;
+      const target = new URL(anchor.href);
+      if (target.hostname !== "wa.me" || target.pathname !== "/5547984692588") return;
+      const record = readConsent();
+      const latest = record?.history.at(-1);
+      // IP/browser data sent through the API require explicit advertising acceptance everywhere.
+      if (!record || !latest || choice() !== true || optedOut()) return;
+      const eventId = crypto.randomUUID();
+      window.fbq?.("trackCustom", "WhatsAppClick", {}, { eventID: eventId });
+      if (pathname !== "/" && pathname !== "/privacidade") return;
+      // Send immediately; do not queue, retry, or replay a click after consent changes.
+      void sendClick({ data: { eventId, path: pathname, consent: {
+        visitor: record.visitor, accepted: true, at: latest.at,
+        noticeVersion: "2026-10-06-capi-1",
+      } } }).catch(() => { /* WhatsApp must still open if measurement fails. */ });
+    };
+    document.addEventListener("click", click);
+    return () => document.removeEventListener("click", click);
+  }, [regulated, pathname, sendClick]);
   function decide(accepted: boolean) {
     if (!saveConsent(accepted)) { setError(true); revokePixel(); return; }
     setError(false); setOpen(false);
