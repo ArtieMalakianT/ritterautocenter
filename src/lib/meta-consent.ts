@@ -48,9 +48,11 @@ export function permitted(regulated: boolean) {
   return !optedOut() && current !== false && (!regulated || current === true);
 }
 let initialized = false;
+let configured = false;
 let loading: Promise<void> | undefined;
 function loadPixel() {
-  return loading ??= new Promise<void>((resolve, reject) => {
+  if (loading) return loading;
+  loading = new Promise<void>((resolve, reject) => {
     if (!window.fbq) {
       const queue = ((...args: unknown[]) => {
         if (queue.callMethod) queue.callMethod(...args); else queue.queue.push(args);
@@ -58,27 +60,35 @@ function loadPixel() {
       queue.queue = []; queue.loaded = true; queue.version = "2.0"; queue.push = queue;
       window.fbq = queue; window._fbq = queue;
     }
-    window.fbq("consent", "revoke");
-    window.fbq("set", "autoConfig", false, PIXEL_ID);
-    window.fbq("init", PIXEL_ID);
+    if (!configured) {
+      window.fbq("consent", "revoke");
+      window.fbq("set", "autoConfig", false, PIXEL_ID);
+      window.fbq("init", PIXEL_ID);
+      configured = true;
+    }
     const script = document.createElement("script");
     script.id = "ritter-meta-pixel"; script.async = true;
     script.src = "https://connect.facebook.net/en_US/fbevents.js";
     script.onload = () => { initialized = true; resolve(); };
-    script.onerror = () => reject(new Error("Meta Pixel indisponível"));
+    script.onerror = () => { script.remove(); reject(new Error("Meta Pixel indisponível")); };
     document.head.appendChild(script);
+  }).catch((error: unknown) => {
+    loading = undefined;
+    throw error;
   });
+  return loading;
 }
 export async function reportPageView(regulated: boolean, isCurrent: () => boolean) {
-  if (!permitted(regulated)) return;
+  if (!permitted(regulated)) return false;
   try {
     // This static site has no query-driven pages; never expose URL parameters to ad tags.
     if (location.search || location.hash) history.replaceState(history.state, "", location.pathname);
     await loadPixel();
-    if (!isCurrent() || !permitted(regulated)) return;
+    if (!isCurrent() || !permitted(regulated)) return false;
     window.fbq?.("consent", "grant");
     window.fbq?.("track", "PageView");
-  } catch { /* A blocked provider must not break the page. */ }
+    return true;
+  } catch { return false; /* A blocked provider must not break the page. */ }
 }
 export function revokePixel() {
   window.fbq?.("consent", "revoke");
