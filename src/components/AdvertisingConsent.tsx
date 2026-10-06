@@ -34,8 +34,9 @@ export function AdvertisingConsent() {
   useEffect(() => {
     if (regulated === null || !permitted(regulated) || lastPage.current === pathname) return;
     let active = true;
-    lastPage.current = pathname;
-    void reportPageView(regulated, () => active);
+    void reportPageView(regulated, () => active).then((reported) => {
+      if (active && reported) lastPage.current = pathname;
+    });
     return () => { active = false; };
   }, [pathname, regulated, revision]);
   function decide(accepted: boolean) {
