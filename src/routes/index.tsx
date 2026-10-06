@@ -24,6 +24,8 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:image", content: "https://ritterautocenter.lovable.app/__l5e/assets-v1/c9d996f1-18b9-4588-b846-5850f29b5fc5/mecanicos.jpg" },
+      { name: "twitter:image", content: "https://ritterautocenter.lovable.app/__l5e/assets-v1/c9d996f1-18b9-4588-b846-5850f29b5fc5/mecanicos.jpg" },
     ],
   }),
   component: Index,

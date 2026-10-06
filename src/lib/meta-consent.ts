@@ -72,6 +72,8 @@ function loadPixel() {
 export async function reportPageView(regulated: boolean, isCurrent: () => boolean) {
   if (!permitted(regulated)) return;
   try {
+    // This static site has no query-driven pages; never expose URL parameters to ad tags.
+    if (location.search || location.hash) history.replaceState(history.state, "", location.pathname);
     await loadPixel();
     if (!isCurrent() || !permitted(regulated)) return;
     window.fbq?.("consent", "grant");
