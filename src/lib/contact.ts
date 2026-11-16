@@ -9,7 +9,7 @@ export const WHATSAPP_ORCAMENTO = whatsappUrl(
   "Olá! Gostaria de solicitar um orçamento transparente na Ritter Auto Center.",
 );
 export const WHATSAPP_AGENDAR = whatsappUrl(
-  "Olá! Quero agendar minha revisão na Ritter Auto Center.",
+  "Olá! Quero agendar um atendimento na Ritter Auto Center.",
 );
 export const WHATSAPP_GERAL = whatsappUrl(
   "Olá, Ritter Auto Center! Tenho uma dúvida.",

@@ -140,7 +140,7 @@ $services = array(
                     <h2>O seu carro merece a precisão de <span class="accent">verdadeiros especialistas.</span></h2>
                     <p class="final-cta__lead">Fale com a nossa equipe agora e sinta a diferença no atendimento.</p>
                     <a class="btn btn-cta btn-lg" style="margin-top:2rem" href="<?php echo esc_url( $contact['wa_agendar'] ); ?>" target="_blank" rel="noopener noreferrer">
-                        Agendar Minha Revisão Gratuita
+                        Agendar Meu Atendimento
                     </a>
                     <address class="final-cta__address">
                         <span class="pin" aria-hidden="true">📍</span>
