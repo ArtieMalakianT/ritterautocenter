@@ -21,7 +21,7 @@ export function FinalCta() {
                 rel="noreferrer"
                 className="mt-8 inline-flex items-center gap-2 rounded-md bg-brand-red px-6 py-3 text-base font-semibold text-brand-red-foreground transition-colors hover:bg-brand-red-hover"
               >
-                Agendar Minha Revisão Gratuita
+                Agendar Meu Atendimento
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </a>
               <div className="mt-8 flex items-start gap-3 text-sm text-white/80">
